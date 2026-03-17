@@ -1,0 +1,2 @@
+1, Carrie, Stephen King, true, Ihor, 15
+2, Lost World, Artur, false, name, 0

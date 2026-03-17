@@ -1,0 +1,272 @@
+/* ============================================
+   LIBRARY MANAGER — Warm Editorial Theme
+   ============================================ */
+
+/* === ROOT === */
+.root {
+    -fx-background-color: #F5F0EB;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 14px;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.border-pane > .vbox {
+    -fx-background-color: #2C2420;
+    -fx-min-width: 200px;
+    -fx-padding: 30 16 20 16;
+    -fx-spacing: 4;
+}
+
+/* Logo */
+.border-pane > .vbox > .label {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F5F0EB;
+    -fx-letter-spacing: 4px;
+    -fx-padding: 0 0 24 8;
+}
+
+/* Sidebar buttons */
+.border-pane > .vbox > .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #C8B8A8;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-padding: 11 14 11 14;
+    -fx-alignment: CENTER-LEFT;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-max-width: Infinity;
+}
+
+.border-pane > .vbox > .button:hover {
+    -fx-background-color: #3D3330;
+    -fx-text-fill: #F5F0EB;
+}
+
+.border-pane > .vbox > .button:pressed {
+    -fx-background-color: #C8A882;
+    -fx-text-fill: #2C2420;
+}
+
+/* ============================================
+   CONTENT AREA
+   ============================================ */
+.stack-pane {
+    -fx-background-color: #F5F0EB;
+    -fx-padding: 0;
+}
+
+/* ============================================
+   DASHBOARD — HBox container
+   ============================================ */
+.hbox {
+    -fx-background-color: #F5F0EB;
+    -fx-alignment: TOP-LEFT;
+}
+
+/* Stat cards */
+.hbox > .vbox {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 28 32 28 32;
+    -fx-border-color: #E5DDD5;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-min-width: 180px;
+    -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.08), 12, 0, 0, 3);
+}
+
+/* Card title */
+.hbox > .vbox > .label:first-child {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: #A09080;
+    -fx-letter-spacing: 2px;
+}
+
+/* Card number */
+.hbox > .vbox > .label:last-child {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 42px;
+    -fx-text-fill: #2C2420;
+}
+
+/* ============================================
+   ALL CONTENT VBOXES (pages)
+   ============================================ */
+.stack-pane > .vbox {
+    -fx-background-color: #F5F0EB;
+    -fx-padding: 36 40 36 40;
+    -fx-spacing: 16;
+}
+
+/* ============================================
+   TEXT FIELDS
+   ============================================ */
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #DDD5CC;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12 16 12 16;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2C2420;
+    -fx-prompt-text-fill: #B8A898;
+    -fx-pref-height: 44px;
+    -fx-max-width: 420px;
+    -fx-min-width: 280px;
+    -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.04), 4, 0, 0, 1);
+}
+
+.text-field:focused {
+    -fx-border-color: #C8A882;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,130,0.25), 8, 0, 0, 0);
+}
+
+/* ============================================
+   BUTTONS (warm tone, not black)
+   ============================================ */
+.button {
+    -fx-background-color: #C8A882;
+    -fx-text-fill: #2C2420;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 11 28 11 28;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,130,0.35), 8, 0, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: #B8946E;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,130,0.5), 12, 0, 0, 3);
+}
+
+.button:pressed {
+    -fx-background-color: #A07E58;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,130,0.2), 4, 0, 0, 1);
+}
+
+.button:disabled {
+    -fx-background-color: #E5DDD5;
+    -fx-text-fill: #B8A898;
+    -fx-cursor: default;
+    -fx-effect: none;
+}
+
+/* ============================================
+   TABLE VIEW
+   ============================================ */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5DDD5;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.07), 12, 0, 0, 3);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #FAF6F2;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #FAF6F2;
+    -fx-border-color: transparent transparent #E5DDD5 transparent;
+    -fx-border-width: 1;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #E5DDD5 transparent;
+    -fx-border-width: 1;
+    -fx-padding: 12 16 12 16;
+}
+
+.table-view .column-header .label {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: #A09080;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1.5px;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #F0E8E0 transparent;
+    -fx-border-width: 1;
+    -fx-cell-size: 48px;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #FDFAF7;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #FDF4EA;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #F5E6D0;
+}
+
+.table-view .table-cell {
+    -fx-padding: 0 16 0 16;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2C2420;
+    -fx-border-color: transparent;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: #2C2420;
+}
+
+.table-view .corner {
+    -fx-background-color: #FAF6F2;
+}
+
+/* Scrollbar */
+.table-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.table-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #D5C8BC;
+    -fx-background-radius: 4;
+}
+
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar .increment-button,
+.table-view .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
+/* ============================================
+   LABELS
+   ============================================ */
+.label {
+    -fx-font-family: "Georgia", serif;
+    -fx-text-fill: #2C2420;
+}
