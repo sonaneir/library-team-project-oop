@@ -68,7 +68,6 @@ public class LibraryApplication extends Application {
         page.setPadding(new Insets(40, 44, 40, 44));
         page.setStyle("-fx-background-color: #F5F0EB;");
 
-        // === HEADER ===
         VBox header = new VBox(4);
         Label greeting = new Label("Welcome back");
         greeting.setStyle(
@@ -86,24 +85,20 @@ public class LibraryApplication extends Application {
         );
         header.getChildren().addAll(greeting, title);
 
-        // === DIVIDER ===
         Region divider = new Region();
         divider.setPrefHeight(1);
         divider.setMaxWidth(Double.MAX_VALUE);
         divider.setStyle("-fx-background-color: #E5DDD5;");
 
-        // === STAT CARDS ROW ===
         HBox cardsRow = new HBox(20);
         cardsRow.setPadding(new Insets(4, 0, 4, 0));
 
-        // Card data: title, color accent, icon text
         cardsRow.getChildren().addAll(
                 buildStatCard("TOTAL BOOKS",    library.amountOfBooks,          "#C8A882", "📚"),
                 buildStatCard("BORROWED",       library.amountOfBooksBorrowed,   "#D4846A", "📤"),
                 buildStatCard("AVAILABLE",      library.amountOfBooksAvailable,  "#7A9E7E", "📥")
         );
 
-        // === PROGRESS SECTION ===
         VBox progressSection = new VBox(12);
         progressSection.setStyle(
                 "-fx-background-color: #FFFFFF;" +
@@ -124,19 +119,16 @@ public class LibraryApplication extends Application {
                         "-fx-letter-spacing: 0.5px;"
         );
 
-        // Borrowed progress bar
         VBox borrowedProgress = buildProgressBar(
                 "Borrowed Books", library.amountOfBooksBorrowed, library.amountOfBooks, "#D4846A"
         );
 
-        // Available progress bar
         VBox availableProgress = buildProgressBar(
                 "Available Books", library.amountOfBooksAvailable, library.amountOfBooks, "#7A9E7E"
         );
 
         progressSection.getChildren().addAll(progressTitle, borrowedProgress, availableProgress);
 
-        // === QUICK INFO ROW ===
         HBox infoRow = new HBox(16);
 
         VBox tipBox = new VBox(8);
@@ -197,7 +189,6 @@ public class LibraryApplication extends Application {
                         "-fx-wrap-text: true;"
         );
 
-        // Dynamic status message
         Runnable updateStatus = () -> {
             int total = library.amountOfBooks.get();
             int borrowed = library.amountOfBooksBorrowed.get();
@@ -232,7 +223,6 @@ public class LibraryApplication extends Application {
         );
         HBox.setHgrow(card, javafx.scene.layout.Priority.ALWAYS);
 
-        // Icon circle
         Label iconLabel = new Label(icon);
         iconLabel.setStyle(
                 "-fx-font-size: 22px;" +
@@ -250,7 +240,6 @@ public class LibraryApplication extends Application {
                         "-fx-text-fill: #2C2420;"
         );
 
-        // Accent bar at bottom
         Region accentBar = new Region();
         accentBar.setPrefHeight(3);
         accentBar.setPrefWidth(40);
@@ -292,7 +281,6 @@ public class LibraryApplication extends Application {
         HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
         labelRow.getChildren().addAll(nameLabel, spacer, countLabel);
 
-        // Track
         StackPane track = new StackPane();
         track.setStyle(
                 "-fx-background-color: #F0E8E0;" +
@@ -312,7 +300,6 @@ public class LibraryApplication extends Application {
 
         track.getChildren().add(fill);
 
-        // Update progress
         Runnable update = () -> {
             int total = totalProp.get();
             int val = valueProp.get();
@@ -326,14 +313,6 @@ public class LibraryApplication extends Application {
 
         container.getChildren().addAll(labelRow, track);
         return container;
-    }
-
-    // Keep old statCard for compatibility (unused now)
-    private Pane statCard(String title, Label valueLabel) {
-        VBox card = new VBox(8);
-        Label titleLabel = new Label(title);
-        card.getChildren().addAll(titleLabel, valueLabel);
-        return card;
     }
 
     private Pane createCheck() {

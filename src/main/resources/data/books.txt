@@ -1,2 +1,1 @@
-1, Carrie, Stephen King, true, Ihor, 15
-2, Lost World, Artur, false, name, 0
+1, Apple, Steve Jobs, false, name, 0

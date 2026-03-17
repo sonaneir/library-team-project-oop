@@ -1,17 +1,9 @@
-/* ============================================
-   LIBRARY MANAGER — Warm Editorial Theme
-   ============================================ */
-
-/* === ROOT === */
 .root {
     -fx-background-color: #F5F0EB;
     -fx-font-family: "Georgia", serif;
     -fx-font-size: 14px;
 }
 
-/* ============================================
-   SIDEBAR
-   ============================================ */
 .border-pane > .vbox {
     -fx-background-color: #2C2420;
     -fx-min-width: 200px;
@@ -19,7 +11,6 @@
     -fx-spacing: 4;
 }
 
-/* Logo */
 .border-pane > .vbox > .label {
     -fx-font-family: "Georgia", serif;
     -fx-font-size: 15px;
@@ -29,7 +20,6 @@
     -fx-padding: 0 0 24 8;
 }
 
-/* Sidebar buttons */
 .border-pane > .vbox > .button {
     -fx-background-color: transparent;
     -fx-text-fill: #C8B8A8;
@@ -54,23 +44,16 @@
     -fx-text-fill: #2C2420;
 }
 
-/* ============================================
-   CONTENT AREA
-   ============================================ */
 .stack-pane {
     -fx-background-color: #F5F0EB;
     -fx-padding: 0;
 }
 
-/* ============================================
-   DASHBOARD — HBox container
-   ============================================ */
 .hbox {
     -fx-background-color: #F5F0EB;
     -fx-alignment: TOP-LEFT;
 }
 
-/* Stat cards */
 .hbox > .vbox {
     -fx-background-color: #FFFFFF;
     -fx-padding: 28 32 28 32;
@@ -82,7 +65,6 @@
     -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.08), 12, 0, 0, 3);
 }
 
-/* Card title */
 .hbox > .vbox > .label:first-child {
     -fx-font-family: "Georgia", serif;
     -fx-font-size: 11px;
@@ -90,25 +72,18 @@
     -fx-letter-spacing: 2px;
 }
 
-/* Card number */
 .hbox > .vbox > .label:last-child {
     -fx-font-family: "Georgia", serif;
     -fx-font-size: 42px;
     -fx-text-fill: #2C2420;
 }
 
-/* ============================================
-   ALL CONTENT VBOXES (pages)
-   ============================================ */
 .stack-pane > .vbox {
     -fx-background-color: #F5F0EB;
     -fx-padding: 36 40 36 40;
     -fx-spacing: 16;
 }
 
-/* ============================================
-   TEXT FIELDS
-   ============================================ */
 .text-field {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #DDD5CC;
@@ -132,9 +107,6 @@
     -fx-effect: dropshadow(gaussian, rgba(200,168,130,0.25), 8, 0, 0, 0);
 }
 
-/* ============================================
-   BUTTONS (warm tone, not black)
-   ============================================ */
 .button {
     -fx-background-color: #C8A882;
     -fx-text-fill: #2C2420;
@@ -166,9 +138,6 @@
     -fx-effect: none;
 }
 
-/* ============================================
-   TABLE VIEW
-   ============================================ */
 .table-view {
     -fx-background-color: #FFFFFF;
     -fx-border-color: #E5DDD5;
@@ -241,7 +210,6 @@
     -fx-background-color: #FAF6F2;
 }
 
-/* Scrollbar */
 .table-view .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-pref-width: 8px;
@@ -263,9 +231,6 @@
     -fx-pref-width: 0;
 }
 
-/* ============================================
-   LABELS
-   ============================================ */
 .label {
     -fx-font-family: "Georgia", serif;
     -fx-text-fill: #2C2420;
