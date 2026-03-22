@@ -47,7 +47,7 @@ public class LibraryApplication extends Application {
         Button issue = menuBtn("Issue Book", createIssue());
         Button borrowed = menuBtn("Borrowed", createBorrowed());
         Button available = menuBtn("Available", createAvailable());
-        Button add =  menuBtn("Add Book", createAdd());
+        Button add = menuBtn("Add Book", createAdd());
 
         side.getChildren().addAll(logo, dash, check, issue, borrowed, available, add);
 
@@ -57,137 +57,70 @@ public class LibraryApplication extends Application {
     private Button menuBtn(String text, Pane pane) {
         Button b = new Button(text);
         b.setMaxWidth(Double.MAX_VALUE);
-
-        b.setOnAction(event -> {content.getChildren().setAll(pane);});
-
+        b.setOnAction(event -> content.getChildren().setAll(pane));
         return b;
     }
 
     private Pane createDashboard() {
         VBox page = new VBox(28);
-        page.setPadding(new Insets(40, 44, 40, 44));
-        page.setStyle("-fx-background-color: #F5F0EB;");
+        page.getStyleClass().add("dashboard-root");
 
         VBox header = new VBox(4);
         Label greeting = new Label("Welcome back");
-        greeting.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-text-fill: #A09080;" +
-                        "-fx-letter-spacing: 1px;"
-        );
+        greeting.getStyleClass().add("greeting-label");
         Label title = new Label("Library Dashboard");
-        title.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 26px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2C2420;"
-        );
+        title.getStyleClass().add("dashboard-title");
         header.getChildren().addAll(greeting, title);
 
         Region divider = new Region();
         divider.setPrefHeight(1);
         divider.setMaxWidth(Double.MAX_VALUE);
-        divider.setStyle("-fx-background-color: #E5DDD5;");
+        divider.getStyleClass().add("divider");
 
         HBox cardsRow = new HBox(20);
         cardsRow.setPadding(new Insets(4, 0, 4, 0));
-
         cardsRow.getChildren().addAll(
-                buildStatCard("TOTAL BOOKS",    library.amountOfBooks,          "#C8A882", "📚"),
-                buildStatCard("BORROWED",       library.amountOfBooksBorrowed,   "#D4846A", "📤"),
-                buildStatCard("AVAILABLE",      library.amountOfBooksAvailable,  "#7A9E7E", "📥")
+                buildStatCard("TOTAL BOOKS", library.amountOfBooks, "#C8A882", "📚"),
+                buildStatCard("BORROWED", library.amountOfBooksBorrowed, "#D4846A", "📤"),
+                buildStatCard("AVAILABLE", library.amountOfBooksAvailable, "#7A9E7E", "📥")
         );
 
         VBox progressSection = new VBox(12);
-        progressSection.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 14;" +
-                        "-fx-border-color: #E5DDD5;" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 14;" +
-                        "-fx-padding: 24 28 24 28;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(44,36,32,0.06), 10, 0, 0, 2);"
-        );
+        progressSection.getStyleClass().add("progress-section");
 
         Label progressTitle = new Label("Collection Overview");
-        progressTitle.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2C2420;" +
-                        "-fx-letter-spacing: 0.5px;"
-        );
+        progressTitle.getStyleClass().add("progress-section-title");
 
-        VBox borrowedProgress = buildProgressBar(
-                "Borrowed Books", library.amountOfBooksBorrowed, library.amountOfBooks, "#D4846A"
-        );
-
-        VBox availableProgress = buildProgressBar(
-                "Available Books", library.amountOfBooksAvailable, library.amountOfBooks, "#7A9E7E"
-        );
+        VBox borrowedProgress = buildProgressBar("Borrowed Books", library.amountOfBooksBorrowed, library.amountOfBooks, "#D4846A");
+        VBox availableProgress = buildProgressBar("Available Books", library.amountOfBooksAvailable, library.amountOfBooks, "#7A9E7E");
 
         progressSection.getChildren().addAll(progressTitle, borrowedProgress, availableProgress);
 
         HBox infoRow = new HBox(16);
 
         VBox tipBox = new VBox(8);
-        tipBox.setStyle(
-                "-fx-background-color: #FDF4EA;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: #E8D5BC;" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-padding: 20 24 20 24;"
-        );
-        HBox.setHgrow(tipBox, javafx.scene.layout.Priority.ALWAYS);
+        tipBox.getStyleClass().add("tip-box");
+        HBox.setHgrow(tipBox, Priority.ALWAYS);
 
         Label tipIcon = new Label("💡");
-        tipIcon.setStyle("-fx-font-size: 20px;");
+        tipIcon.getStyleClass().add("icon-label");
         Label tipTitle = new Label("Quick Tip");
-        tipTitle.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #A07E58;"
-        );
+        tipTitle.getStyleClass().add("tip-title");
         Label tipText = new Label("Use 'Issue Book' to lend\na book to a customer.");
-        tipText.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-text-fill: #6B5A48;" +
-                        "-fx-wrap-text: true;"
-        );
+        tipText.getStyleClass().add("tip-text");
         tipBox.getChildren().addAll(tipIcon, tipTitle, tipText);
 
         VBox statusBox = new VBox(8);
-        statusBox.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: #E5DDD5;" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-padding: 20 24 20 24;"
-        );
-        HBox.setHgrow(statusBox, javafx.scene.layout.Priority.ALWAYS);
+        statusBox.getStyleClass().add("status-box");
+        HBox.setHgrow(statusBox, Priority.ALWAYS);
 
         Label statusIcon = new Label("📊");
-        statusIcon.setStyle("-fx-font-size: 20px;");
+        statusIcon.getStyleClass().add("icon-label");
         Label statusTitle = new Label("Library Status");
-        statusTitle.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2C2420;"
-        );
+        statusTitle.getStyleClass().add("status-title");
 
         Label statusValue = new Label();
-        statusValue.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-text-fill: #6B6560;" +
-                        "-fx-wrap-text: true;"
-        );
+        statusValue.getStyleClass().add("status-value");
 
         Runnable updateStatus = () -> {
             int total = library.amountOfBooks.get();
@@ -195,7 +128,7 @@ public class LibraryApplication extends Application {
             if (total == 0) {
                 statusValue.setText("No books in library yet.");
             } else {
-                int pct = (int)((borrowed / (double) total) * 100);
+                int pct = (int) ((borrowed / (double) total) * 100);
                 statusValue.setText(pct + "% of books are\ncurrently borrowed.");
             }
         };
@@ -212,16 +145,8 @@ public class LibraryApplication extends Application {
 
     private VBox buildStatCard(String label, javafx.beans.property.IntegerProperty valueProp, String accent, String icon) {
         VBox card = new VBox(10);
-        card.setStyle(
-                "-fx-background-color: #FFFFFF;" +
-                        "-fx-background-radius: 14;" +
-                        "-fx-border-color: #E5DDD5;" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 14;" +
-                        "-fx-padding: 22 26 22 26;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(44,36,32,0.07), 12, 0, 0, 3);"
-        );
-        HBox.setHgrow(card, javafx.scene.layout.Priority.ALWAYS);
+        card.getStyleClass().add("stat-card");
+        HBox.setHgrow(card, Priority.ALWAYS);
 
         Label iconLabel = new Label(icon);
         iconLabel.setStyle(
@@ -233,12 +158,7 @@ public class LibraryApplication extends Application {
 
         Label valueLabel = new Label();
         valueLabel.textProperty().bind(valueProp.asString());
-        valueLabel.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 38px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #2C2420;"
-        );
+        valueLabel.getStyleClass().add("stat-card-value");
 
         Region accentBar = new Region();
         accentBar.setPrefHeight(3);
@@ -249,12 +169,7 @@ public class LibraryApplication extends Application {
         );
 
         Label titleLabel = new Label(label);
-        titleLabel.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 10px;" +
-                        "-fx-text-fill: #A09080;" +
-                        "-fx-letter-spacing: 2px;"
-        );
+        titleLabel.getStyleClass().add("stat-card-title");
 
         card.getChildren().addAll(iconLabel, valueLabel, accentBar, titleLabel);
         return card;
@@ -266,35 +181,20 @@ public class LibraryApplication extends Application {
 
         HBox labelRow = new HBox();
         Label nameLabel = new Label(label);
-        nameLabel.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-text-fill: #6B5A48;"
-        );
+        nameLabel.getStyleClass().add("progress-name-label");
         Label countLabel = new Label();
-        countLabel.setStyle(
-                "-fx-font-family: 'Georgia', serif;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-text-fill: #A09080;"
-        );
+        countLabel.getStyleClass().add("progress-count-label");
         Region spacer = new Region();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
         labelRow.getChildren().addAll(nameLabel, spacer, countLabel);
 
         StackPane track = new StackPane();
-        track.setStyle(
-                "-fx-background-color: #F0E8E0;" +
-                        "-fx-background-radius: 4;" +
-                        "-fx-pref-height: 8;"
-        );
+        track.getStyleClass().add("progress-track");
         track.setPrefHeight(8);
         track.setMaxWidth(Double.MAX_VALUE);
 
         Region fill = new Region();
-        fill.setStyle(
-                "-fx-background-color: " + color + ";" +
-                        "-fx-background-radius: 4;"
-        );
+        fill.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 4;");
         fill.setPrefHeight(8);
         StackPane.setAlignment(fill, javafx.geometry.Pos.CENTER_LEFT);
 
@@ -396,9 +296,7 @@ public class LibraryApplication extends Application {
             }
         });
 
-
         searchBox.getChildren().addAll(searchField, booksTable, deleteButton);
-
         return searchBox;
     }
 
@@ -430,11 +328,10 @@ public class LibraryApplication extends Application {
                 issueAlert.setContentText("Days must be a number!");
             }
 
-            if (checkInt && !bookField.getText().isEmpty() &&  !personField.getText().isEmpty() && !daysField.getText().isEmpty()) {
+            if (checkInt && !bookField.getText().isEmpty() && !personField.getText().isEmpty() && !daysField.getText().isEmpty()) {
                 String bookName = bookField.getText();
                 String personName = personField.getText();
                 boolean checkBook = false;
-
 
                 for (Book issueBook : library.availableBooks) {
                     if (issueBook.getTitle().equals(bookName)) {
@@ -454,38 +351,35 @@ public class LibraryApplication extends Application {
                         daysField.clear();
 
                         checkBook = true;
-
                         break;
-
                     }
                 }
 
                 if (!checkBook) {
                     issueAlert.setTitle("Error");
                     issueAlert.setContentText("Book is not available!");
-
                     bookField.clear();
                 }
 
-            } else if (!bookField.getText().isEmpty() &&  personField.getText().isEmpty() && daysField.getText().isEmpty()){
+            } else if (!bookField.getText().isEmpty() && personField.getText().isEmpty() && daysField.getText().isEmpty()) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the customer's name and the days!");
-            } else if (!bookField.getText().isEmpty() &&  !personField.getText().isEmpty() && daysField.getText().isEmpty()){
+            } else if (!bookField.getText().isEmpty() && !personField.getText().isEmpty() && daysField.getText().isEmpty()) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the days!");
-            } else if (!bookField.getText().isEmpty() && personField.getText().isEmpty() && !daysField.getText().isEmpty()){
+            } else if (!bookField.getText().isEmpty() && personField.getText().isEmpty() && !daysField.getText().isEmpty()) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the customer's name!");
-            } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && !daysField.getText().isEmpty() && checkInt){
+            } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && !daysField.getText().isEmpty() && checkInt) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the book to borrow!");
-            } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && daysField.getText().isEmpty() && checkInt){
+            } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && daysField.getText().isEmpty() && checkInt) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the days and the book to borrow!");
-            } else if (bookField.getText().isEmpty() &&  personField.getText().isEmpty() && !daysField.getText().isEmpty() && checkInt){
+            } else if (bookField.getText().isEmpty() && personField.getText().isEmpty() && !daysField.getText().isEmpty() && checkInt) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the book to borrow and customer's name!");
-            } else if (bookField.getText().isEmpty() &&  personField.getText().isEmpty() && daysField.getText().isEmpty() && checkInt){
+            } else if (bookField.getText().isEmpty() && personField.getText().isEmpty() && daysField.getText().isEmpty() && checkInt) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please fill all the fields!");
             }
@@ -494,7 +388,6 @@ public class LibraryApplication extends Application {
         });
 
         issueBox.getChildren().addAll(bookField, personField, daysField, issueButton);
-
         return issueBox;
     }
 
@@ -517,16 +410,14 @@ public class LibraryApplication extends Application {
         daysColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStringDays()));
 
         borrowedList.getColumns().addAll(titleColumn, authorColumn, personColumn, daysColumn);
-
         borrowedList.setItems(library.borrowedBooks);
         borrowedList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         borrowedBox.getChildren().addAll(borrowedList);
-
         return borrowedBox;
     }
 
-    private Pane createAvailable(){
+    private Pane createAvailable() {
         VBox availableBox = new VBox(20);
         availableBox.setPadding(new Insets(30));
 
@@ -539,12 +430,10 @@ public class LibraryApplication extends Application {
         authorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAuthor()));
 
         availableList.getColumns().addAll(titleColumn, authorColumn);
-
         availableList.setItems(library.availableBooks);
         availableList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         availableBox.getChildren().addAll(availableList);
-
         return availableBox;
     }
 
@@ -563,32 +452,27 @@ public class LibraryApplication extends Application {
         addAlert.setHeaderText(null);
 
         addButton.setOnAction(event -> {
-            if(!titleField.getText().isEmpty() && !authorField.getText().isEmpty()){
+            if (!titleField.getText().isEmpty() && !authorField.getText().isEmpty()) {
                 Book newBook = new Book(titleField.getText(), authorField.getText());
-
                 library.addBook(newBook);
-
                 addAlert.setTitle("Success");
                 addAlert.setContentText("Book added successfully!");
-
                 titleField.clear();
                 authorField.clear();
-            } else if (titleField.getText().isEmpty() && !authorField.getText().isEmpty()){
+            } else if (titleField.getText().isEmpty() && !authorField.getText().isEmpty()) {
                 addAlert.setTitle("Error");
                 addAlert.setContentText("Please enter the title!");
-            } else if (!titleField.getText().isEmpty() && authorField.getText().isEmpty()){
+            } else if (!titleField.getText().isEmpty() && authorField.getText().isEmpty()) {
                 addAlert.setTitle("Error");
                 addAlert.setContentText("Please enter the author!");
             } else {
                 addAlert.setTitle("Error");
                 addAlert.setContentText("Please enter the title and the author!");
             }
-
             addAlert.showAndWait();
         });
 
         addBox.getChildren().addAll(titleField, authorField, addButton);
-
         return addBox;
     }
 }

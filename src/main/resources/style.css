@@ -235,3 +235,142 @@
     -fx-font-family: "Georgia", serif;
     -fx-text-fill: #2C2420;
 }
+
+.dashboard-root {
+    -fx-background-color: #F5F0EB;
+    -fx-padding: 40 44 40 44;
+    -fx-spacing: 28;
+}
+
+.greeting-label {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #A09080;
+    -fx-letter-spacing: 1px;
+}
+
+.dashboard-title {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C2420;
+}
+
+.divider {
+    -fx-background-color: #E5DDD5;
+    -fx-pref-height: 1;
+}
+
+.stat-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14;
+    -fx-border-color: #E5DDD5;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-padding: 22 26 22 26;
+    -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.07), 12, 0, 0, 3);
+    -fx-spacing: 10;
+}
+
+.stat-card-value {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C2420;
+}
+
+.stat-card-title {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 10px;
+    -fx-text-fill: #A09080;
+    -fx-letter-spacing: 2px;
+}
+
+.progress-section {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 14;
+    -fx-border-color: #E5DDD5;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-padding: 24 28 24 28;
+    -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.06), 10, 0, 0, 2);
+    -fx-spacing: 12;
+}
+
+.progress-section-title {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C2420;
+    -fx-letter-spacing: 0.5px;
+}
+
+.progress-name-label {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B5A48;
+}
+
+.progress-count-label {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #A09080;
+}
+
+.progress-track {
+    -fx-background-color: #F0E8E0;
+    -fx-background-radius: 4;
+    -fx-pref-height: 8;
+}
+
+.tip-box {
+    -fx-background-color: #FDF4EA;
+    -fx-background-radius: 12;
+    -fx-border-color: #E8D5BC;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-padding: 20 24 20 24;
+    -fx-spacing: 8;
+}
+
+.tip-title {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #A07E58;
+}
+
+.tip-text {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B5A48;
+    -fx-wrap-text: true;
+}
+
+.status-box {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-color: #E5DDD5;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-padding: 20 24 20 24;
+    -fx-spacing: 8;
+}
+
+.status-title {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C2420;
+}
+
+.status-value {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B6560;
+    -fx-wrap-text: true;
+}
+
+.icon-label {
+    -fx-font-size: 20px;
+}

@@ -1,1 +1,1 @@
-1, Apple, Steve Jobs, false, name, 0
+1, Microsoft, Bill Gates, false, name, 0
