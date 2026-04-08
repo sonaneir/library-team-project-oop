@@ -28,7 +28,7 @@ public class LibraryApplication extends Application {
         content.getChildren().add(createDashboard());
 
         Scene scene = new Scene(root, 1100, 650);
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         stage.setTitle("Library Manager");
         stage.setScene(scene);
         stage.show();
@@ -282,7 +282,7 @@ public class LibraryApplication extends Application {
             Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
             if (selectedBook != null) {
                 Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                confirm.getDialogPane().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+                confirm.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
                 confirm.setTitle("Delete Book");
                 confirm.setHeaderText(null);
                 confirm.setContentText("Are you sure you want to delete \"" + selectedBook.getTitle() + "\"?");
@@ -313,7 +313,7 @@ public class LibraryApplication extends Application {
         Button issueButton = new Button("Issue");
 
         Alert issueAlert = new Alert(Alert.AlertType.INFORMATION);
-        issueAlert.getDialogPane().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        issueAlert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         issueAlert.setHeaderText(null);
 
         issueButton.setOnAction(event -> {
@@ -448,7 +448,7 @@ public class LibraryApplication extends Application {
         Button addButton = new Button("Add Book");
 
         Alert addAlert = new Alert(Alert.AlertType.INFORMATION);
-        addAlert.getDialogPane().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        addAlert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         addAlert.setHeaderText(null);
 
         addButton.setOnAction(event -> {
