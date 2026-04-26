@@ -19,14 +19,17 @@ public class Library {
     public IntegerProperty amountOfBooksBorrowed = new SimpleIntegerProperty(0);
     public IntegerProperty amountOfBooksAvailable = new SimpleIntegerProperty(0);
 
+    public UserQueue userQueue = new UserQueue();
+    public ObservableList<User> reservationQueue = FXCollections.observableArrayList();
+
     public Library() {
         downloadBooks();
     }
 
-    public void downloadBooks(){
+    public void downloadBooks() {
         try {
             List<String> lines = Files.readAllLines(Path.of("src/main/resources/data/books.txt"));
-            for(String line : lines){
+            for (String line : lines) {
                 String[] words = line.split(", ");
 
                 Book book = new Book(words[1], words[2]);
@@ -37,7 +40,7 @@ public class Library {
                 books.add(book);
                 amountOfBooks.set(amountOfBooks.get() + 1);
 
-                if(book.getBorrowed()){
+                if (book.getBorrowed()) {
                     borrowedBooks.add(book);
                     amountOfBooksBorrowed.set(amountOfBooksBorrowed.get() + 1);
                 } else {
@@ -50,7 +53,7 @@ public class Library {
         }
     }
 
-    public void addBook(Book book){
+    public void addBook(Book book) {
         amountOfBooks.set(amountOfBooks.get() + 1);
         amountOfBooksAvailable.set(amountOfBooksAvailable.get() + 1);
         books.add(book);
@@ -71,9 +74,48 @@ public class Library {
         saveBooks();
     }
 
-    private void saveBooks(){
+    public void reserveBook(User user, Book book) {
+        book.setReservedBy(user.getLogin());
+        user.setReservedBook(book);
+        availableBooks.remove(book);
+        userQueue.enqueue(user);
+        reservationQueue.add(user);
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getId() == book.getId()) {
+                books.set(i, book);
+                break;
+            }
+        }
+        saveBooks();
+    }
+
+    public void issueReservation(User user) {
+        Book book = user.getReservedBook();
+        if (book == null) return;
+
+        book.setBorrowed(true);
+        book.setPerson(user.getName());
+        book.setReservedBy(null);
+
+        amountOfBooksBorrowed.set(amountOfBooksBorrowed.get() + 1);
+
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getId() == book.getId()) {
+                books.set(i, book);
+                break;
+            }
+        }
+
+        borrowedBooks.add(book);
+        userQueue.removeByLogin(user.getLogin());
+        reservationQueue.remove(user);
+        user.setReservedBook(null);
+        saveBooks();
+    }
+
+    private void saveBooks() {
         List<String> lines = new ArrayList<>();
-        for(Book book : books){
+        for (Book book : books) {
             lines.add(book.toString());
         }
         try {
@@ -81,10 +123,10 @@ public class Library {
         } catch (IOException e) {}
     }
 
-    public void deleteBook(int id){
+    public void deleteBook(int id) {
         books.forEach(book -> {
-            if(book.getId() == id){
-                if(book.getBorrowed()){
+            if (book.getId() == id) {
+                if (book.getBorrowed()) {
                     amountOfBooks.set(amountOfBooks.get() - 1);
                     amountOfBooksBorrowed.set(amountOfBooksBorrowed.get() - 1);
                 } else {
@@ -99,7 +141,7 @@ public class Library {
         availableBooks.removeIf(book -> book.getId() == id);
 
         books.forEach(book -> {
-            if(book.getId() > id) book.decreaseId();
+            if (book.getId() > id) book.decreaseId();
         });
 
         Book.resetBookId(books.size() + 1);

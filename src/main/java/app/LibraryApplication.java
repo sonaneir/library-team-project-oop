@@ -4,37 +4,282 @@ import javafx.application.Application;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibraryApplication extends Application {
     private StackPane content = new StackPane();
     private Library library = new Library();
+    private User currentUser = null;
 
     @Override
     public void start(Stage stage) throws IOException {
-        BorderPane root = new BorderPane();
-        root.setCenter(content);
-        root.setLeft(createSideBar());
-
-        content.getChildren().add(createDashboard());
-
-        Scene scene = new Scene(root, 1100, 650);
+        Scene scene = new Scene(createRoleSelection(stage), 1100, 650);
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
         stage.setTitle("Library Manager");
         stage.setScene(scene);
         stage.show();
     }
 
-    private VBox createSideBar() {
+    private Pane createRoleSelection(Stage stage) {
+        VBox root = new VBox(32);
+        root.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("role-selection-root");
+
+        Label title = new Label("LIBRARY");
+        title.getStyleClass().add("role-logo");
+
+        Label subtitle = new Label("Select your role to continue");
+        subtitle.getStyleClass().add("role-subtitle");
+
+        HBox cards = new HBox(28);
+        cards.setAlignment(Pos.CENTER);
+
+        VBox adminCard = new VBox(16);
+        adminCard.getStyleClass().add("role-card");
+        adminCard.setAlignment(Pos.CENTER);
+        Label adminIcon = new Label("🔑");
+        adminIcon.getStyleClass().add("role-icon");
+        Label adminLabel = new Label("Administrator");
+        adminLabel.getStyleClass().add("role-card-title");
+        Label adminDesc = new Label("Manage books, issue,\nand handle reservations");
+        adminDesc.getStyleClass().add("role-card-desc");
+        adminCard.getChildren().addAll(adminIcon, adminLabel, adminDesc);
+        adminCard.setOnMouseClicked(e -> launchAdmin(stage));
+
+        VBox userCard = new VBox(16);
+        userCard.getStyleClass().add("role-card");
+        userCard.setAlignment(Pos.CENTER);
+        Label userIcon = new Label("📖");
+        userIcon.getStyleClass().add("role-icon");
+        Label userLabel = new Label("User");
+        userLabel.getStyleClass().add("role-card-title");
+        Label userDesc = new Label("Browse and reserve\navailable books");
+        userDesc.getStyleClass().add("role-card-desc");
+        userCard.getChildren().addAll(userIcon, userLabel, userDesc);
+        userCard.setOnMouseClicked(e -> showUserLogin(stage));
+
+        cards.getChildren().addAll(adminCard, userCard);
+        root.getChildren().addAll(title, subtitle, cards);
+        return root;
+    }
+
+    private void launchAdmin(Stage stage) {
+        BorderPane root = new BorderPane();
+        root.setCenter(content);
+        root.setLeft(createAdminSideBar(stage));
+        content.getChildren().setAll(createDashboard());
+        Scene scene = new Scene(root, 1100, 650);
+        scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        stage.setScene(scene);
+    }
+
+    private void showUserLogin(Stage stage) {
+        VBox root = new VBox(20);
+        root.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("role-selection-root");
+
+        Label title = new Label("User Login");
+        title.getStyleClass().add("dashboard-title");
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Full Name");
+        nameField.setMaxWidth(320);
+
+        TextField loginField = new TextField();
+        loginField.setPromptText("Login (username)");
+        loginField.setMaxWidth(320);
+
+        Button continueBtn = new Button("Continue");
+        continueBtn.setMaxWidth(320);
+
+        Label errorLabel = new Label("");
+        errorLabel.setStyle("-fx-text-fill: #D4846A;");
+
+        Button backBtn = new Button("← Back");
+        backBtn.getStyleClass().add("back-button");
+        backBtn.setOnAction(e -> {
+            Scene scene = new Scene(createRoleSelection(stage), 1100, 650);
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+            stage.setScene(scene);
+        });
+
+        continueBtn.setOnAction(e -> {
+            if (nameField.getText().isEmpty() || loginField.getText().isEmpty()) {
+                errorLabel.setText("Please fill in both fields.");
+                return;
+            }
+            currentUser = new User(nameField.getText(), loginField.getText());
+            launchUser(stage);
+        });
+
+        root.getChildren().addAll(backBtn, title, nameField, loginField, continueBtn, errorLabel);
+        Scene scene = new Scene(root, 1100, 650);
+        scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        stage.setScene(scene);
+    }
+
+    private void launchUser(Stage stage) {
+        StackPane userContent = new StackPane();
+        BorderPane root = new BorderPane();
+        root.setCenter(userContent);
+        root.setLeft(createUserSideBar(stage, userContent));
+        userContent.getChildren().setAll(createUserBrowse(userContent));
+        Scene scene = new Scene(root, 1100, 650);
+        scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        stage.setScene(scene);
+    }
+
+    private VBox createUserSideBar(Stage stage, StackPane userContent) {
+        VBox side = new VBox(15);
+        side.setPadding(new Insets(20));
+
+        Label logo = new Label("LIBRARY");
+
+        Button browseBtn = new Button("Browse Books");
+        browseBtn.setMaxWidth(Double.MAX_VALUE);
+        browseBtn.setOnAction(e -> userContent.getChildren().setAll(createUserBrowse(userContent)));
+
+        Button myReservationBtn = new Button("My Reservation");
+        myReservationBtn.setMaxWidth(Double.MAX_VALUE);
+        myReservationBtn.setOnAction(e -> userContent.getChildren().setAll(createUserReservation()));
+
+        Button backBtn = new Button("← Exit");
+        backBtn.setMaxWidth(Double.MAX_VALUE);
+        backBtn.getStyleClass().add("back-button");
+        backBtn.setOnAction(e -> {
+            currentUser = null;
+            Scene scene = new Scene(createRoleSelection(stage), 1100, 650);
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+            stage.setScene(scene);
+        });
+
+        Label userLabel = new Label("Logged in as:\n" + currentUser.getName());
+        userLabel.getStyleClass().add("user-info-label");
+
+        side.getChildren().addAll(logo, browseBtn, myReservationBtn, backBtn, userLabel);
+        return side;
+    }
+
+    private Pane createUserBrowse(StackPane userContent) {
+        VBox page = new VBox(16);
+        page.setPadding(new Insets(36, 40, 36, 40));
+
+        Label title = new Label("Available Books");
+        title.getStyleClass().add("dashboard-title");
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by title or author...");
+
+        TableView<Book> table = new TableView<>();
+
+        TableColumn<Book, String> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().getId())));
+
+        TableColumn<Book, String> titleCol = new TableColumn<>("Title");
+        titleCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getTitle()));
+
+        TableColumn<Book, String> authorCol = new TableColumn<>("Author");
+        authorCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getAuthor()));
+
+        TableColumn<Book, String> statusCol = new TableColumn<>("Status");
+        statusCol.setCellValueFactory(d -> {
+            Book b = d.getValue();
+            if (b.isReserved()) return new SimpleStringProperty("Reserved");
+            return new SimpleStringProperty("Available");
+        });
+
+        table.getColumns().addAll(idCol, titleCol, authorCol, statusCol);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        FilteredList<Book> filtered = new FilteredList<>(library.availableBooks, b -> true);
+        searchField.textProperty().addListener((obs, ov, nv) -> {
+            filtered.setPredicate(b -> {
+                if (nv == null || nv.isEmpty()) return true;
+                String lower = nv.toLowerCase();
+                return b.getTitle().toLowerCase().contains(lower) || b.getAuthor().toLowerCase().contains(lower);
+            });
+        });
+        table.setItems(filtered);
+
+        Button reserveBtn = new Button("Reserve");
+        reserveBtn.setDisable(true);
+
+        table.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
+            reserveBtn.setDisable(nv == null || nv.isReserved() || currentUser.hasReservation());
+        });
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+
+        reserveBtn.setOnAction(e -> {
+            Book selected = table.getSelectionModel().getSelectedItem();
+            if (selected == null) return;
+            if (currentUser.hasReservation()) {
+                alert.setTitle("Info");
+                alert.setContentText("You already have an active reservation.");
+                alert.showAndWait();
+                return;
+            }
+            library.reserveBook(currentUser, selected);
+            alert.setTitle("Success");
+            alert.setContentText("Book \"" + selected.getTitle() + "\" reserved successfully!");
+            alert.showAndWait();
+            userContent.getChildren().setAll(createUserBrowse(userContent));
+        });
+
+        page.getChildren().addAll(title, searchField, table, reserveBtn);
+        return page;
+    }
+
+    private Pane createUserReservation() {
+        VBox page = new VBox(16);
+        page.setPadding(new Insets(36, 40, 36, 40));
+
+        Label title = new Label("My Reservation");
+        title.getStyleClass().add("dashboard-title");
+
+        if (!currentUser.hasReservation()) {
+            Label none = new Label("You have no active reservations.");
+            none.getStyleClass().add("greeting-label");
+            page.getChildren().addAll(title, none);
+            return page;
+        }
+
+        Book b = currentUser.getReservedBook();
+
+        VBox card = new VBox(10);
+        card.getStyleClass().add("stat-card");
+        card.setMaxWidth(400);
+
+        Label bookTitle = new Label("📚  " + b.getTitle());
+        bookTitle.getStyleClass().add("stat-card-value");
+        bookTitle.setStyle("-fx-font-size: 18px;");
+
+        Label bookAuthor = new Label("Author: " + b.getAuthor());
+        bookAuthor.getStyleClass().add("progress-name-label");
+
+        Label status = new Label("Status: Reserved — waiting for admin to issue");
+        status.getStyleClass().add("tip-text");
+
+        card.getChildren().addAll(bookTitle, bookAuthor, status);
+        page.getChildren().addAll(title, card);
+        return page;
+    }
+
+    private VBox createAdminSideBar(Stage stage) {
         VBox side = new VBox(15);
         side.setPadding(new Insets(20));
 
@@ -47,10 +292,19 @@ public class LibraryApplication extends Application {
         Button issue = menuBtn("Issue Book", createIssue());
         Button borrowed = menuBtn("Borrowed", createBorrowed());
         Button available = menuBtn("Available", createAvailable());
+        Button reserved = menuBtn("Reserved", createReserved());
         Button add = menuBtn("Add Book", createAdd());
 
-        side.getChildren().addAll(logo, dash, check, issue, borrowed, available, add);
+        Button backBtn = new Button("← Exit");
+        backBtn.setMaxWidth(Double.MAX_VALUE);
+        backBtn.getStyleClass().add("back-button");
+        backBtn.setOnAction(e -> {
+            Scene scene = new Scene(createRoleSelection(stage), 1100, 650);
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+            stage.setScene(scene);
+        });
 
+        side.getChildren().addAll(logo, dash, check, issue, borrowed, available, reserved, add, backBtn);
         return side;
     }
 
@@ -106,7 +360,7 @@ public class LibraryApplication extends Application {
         tipIcon.getStyleClass().add("icon-label");
         Label tipTitle = new Label("Quick Tip");
         tipTitle.getStyleClass().add("tip-title");
-        Label tipText = new Label("Use 'Issue Book' to lend\na book to a customer.");
+        Label tipText = new Label("Use 'Reserved' section to\nissue books from the queue.");
         tipText.getStyleClass().add("tip-text");
         tipBox.getChildren().addAll(tipIcon, tipTitle, tipText);
 
@@ -143,7 +397,7 @@ public class LibraryApplication extends Application {
         return page;
     }
 
-    private VBox buildStatCard(String label, javafx.beans.property.IntegerProperty valueProp, String accent, String icon) {
+    private VBox buildStatCard(String label, IntegerProperty valueProp, String accent, String icon) {
         VBox card = new VBox(10);
         card.getStyleClass().add("stat-card");
         HBox.setHgrow(card, Priority.ALWAYS);
@@ -175,8 +429,7 @@ public class LibraryApplication extends Application {
         return card;
     }
 
-    private VBox buildProgressBar(String label, javafx.beans.property.IntegerProperty valueProp,
-                                  javafx.beans.property.IntegerProperty totalProp, String color) {
+    private VBox buildProgressBar(String label, IntegerProperty valueProp, IntegerProperty totalProp, String color) {
         VBox container = new VBox(6);
 
         HBox labelRow = new HBox();
@@ -216,15 +469,25 @@ public class LibraryApplication extends Application {
     }
 
     private Pane createCheck() {
-        VBox searchBox = new VBox(15);
+        VBox searchBox = new VBox(12);
         searchBox.setPadding(new Insets(30));
 
         TextField searchField = new TextField();
         searchField.setPromptText("Search book...");
 
+        HBox sortRow = new HBox(10);
+        sortRow.setAlignment(Pos.CENTER_LEFT);
+        Label sortLabel = new Label("Sort by:");
+        sortLabel.getStyleClass().add("progress-name-label");
+
+        Button sortTitle = new Button("Title");
+        Button sortId = new Button("ID");
+        Button sortAuthor = new Button("Author");
+        sortRow.getChildren().addAll(sortLabel, sortTitle, sortId, sortAuthor);
+
         TableView<Book> booksTable = new TableView<>();
 
-        TableColumn<Book, String> idColumn = new TableColumn("Book ID");
+        TableColumn<Book, String> idColumn = new TableColumn<>("Book ID");
         idColumn.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getId())));
 
         TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
@@ -234,9 +497,12 @@ public class LibraryApplication extends Application {
         authorColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAuthor()));
 
         TableColumn<Book, String> statusColumn = new TableColumn<>("Status");
-        statusColumn.setCellValueFactory(data -> new SimpleStringProperty(
-                data.getValue().getBorrowed() ? "Borrowed" : "Available"
-        ));
+        statusColumn.setCellValueFactory(data -> {
+            Book b = data.getValue();
+            if (b.getBorrowed()) return new SimpleStringProperty("Borrowed");
+            if (b.isReserved()) return new SimpleStringProperty("Reserved");
+            return new SimpleStringProperty("Available");
+        });
 
         booksTable.getColumns().addAll(idColumn, titleColumn, authorColumn, statusColumn);
         booksTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -271,6 +537,24 @@ public class LibraryApplication extends Application {
 
         booksTable.setItems(filteredBooks);
 
+        sortTitle.setOnAction(e -> {
+            List<Book> sorted = new ArrayList<>(allBooks);
+            BookSorter.quickSortByTitle(sorted, 0, sorted.size() - 1);
+            allBooks.setAll(sorted);
+        });
+
+        sortId.setOnAction(e -> {
+            List<Book> sorted = new ArrayList<>(allBooks);
+            BookSorter.quickSortById(sorted, 0, sorted.size() - 1);
+            allBooks.setAll(sorted);
+        });
+
+        sortAuthor.setOnAction(e -> {
+            List<Book> sorted = new ArrayList<>(allBooks);
+            BookSorter.quickSortByAuthor(sorted, 0, sorted.size() - 1);
+            allBooks.setAll(sorted);
+        });
+
         Button deleteButton = new Button("Delete");
         deleteButton.setDisable(true);
 
@@ -296,7 +580,7 @@ public class LibraryApplication extends Application {
             }
         });
 
-        searchBox.getChildren().addAll(searchField, booksTable, deleteButton);
+        searchBox.getChildren().addAll(searchField, sortRow, booksTable, deleteButton);
         return searchBox;
     }
 
@@ -373,13 +657,13 @@ public class LibraryApplication extends Application {
             } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && !daysField.getText().isEmpty() && checkInt) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the book to borrow!");
-            } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && daysField.getText().isEmpty() && checkInt) {
+            } else if (bookField.getText().isEmpty() && !personField.getText().isEmpty() && daysField.getText().isEmpty()) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the days and the book to borrow!");
             } else if (bookField.getText().isEmpty() && personField.getText().isEmpty() && !daysField.getText().isEmpty() && checkInt) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the book to borrow and customer's name!");
-            } else if (bookField.getText().isEmpty() && personField.getText().isEmpty() && daysField.getText().isEmpty() && checkInt) {
+            } else {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please fill all the fields!");
             }
@@ -389,6 +673,97 @@ public class LibraryApplication extends Application {
 
         issueBox.getChildren().addAll(bookField, personField, daysField, issueButton);
         return issueBox;
+    }
+
+    private Pane createReserved() {
+        VBox page = new VBox(20);
+        page.setPadding(new Insets(36, 40, 36, 40));
+
+        Label title = new Label("Reserved Books — Queue");
+        title.getStyleClass().add("dashboard-title");
+
+        Label subtitle = new Label("Users are ordered by reservation time. Issue to the first in queue.");
+        subtitle.getStyleClass().add("greeting-label");
+
+        TableView<User> queueTable = new TableView<>();
+
+        TableColumn<User, String> posCol = new TableColumn<>("#");
+        posCol.setCellValueFactory(d -> {
+            int idx = library.reservationQueue.indexOf(d.getValue()) + 1;
+            return new SimpleStringProperty(String.valueOf(idx));
+        });
+        posCol.setMaxWidth(50);
+
+        TableColumn<User, String> userNameCol = new TableColumn<>("User Name");
+        userNameCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getName()));
+
+        TableColumn<User, String> loginCol = new TableColumn<>("Login");
+        loginCol.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getLogin()));
+
+        TableColumn<User, String> bookCol = new TableColumn<>("Reserved Book");
+        bookCol.setCellValueFactory(d -> {
+            Book b = d.getValue().getReservedBook();
+            return new SimpleStringProperty(b != null ? b.getTitle() : "—");
+        });
+
+        TableColumn<User, String> authorCol = new TableColumn<>("Author");
+        authorCol.setCellValueFactory(d -> {
+            Book b = d.getValue().getReservedBook();
+            return new SimpleStringProperty(b != null ? b.getAuthor() : "—");
+        });
+
+        queueTable.getColumns().addAll(posCol, userNameCol, loginCol, bookCol, authorCol);
+        queueTable.setItems(library.reservationQueue);
+        queueTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TextField daysField = new TextField();
+        daysField.setPromptText("Days to issue");
+        daysField.setMaxWidth(200);
+
+        Button issueBtn = new Button("Issue to First in Queue");
+        issueBtn.setDisable(library.reservationQueue.isEmpty());
+
+        library.reservationQueue.addListener((javafx.collections.ListChangeListener<User>) c -> {
+            issueBtn.setDisable(library.reservationQueue.isEmpty());
+        });
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+
+        issueBtn.setOnAction(e -> {
+            if (library.userQueue.isEmpty()) return;
+            int days;
+            try {
+                days = Integer.parseInt(daysField.getText());
+            } catch (NumberFormatException ex) {
+                alert.setTitle("Error");
+                alert.setContentText("Please enter valid number of days.");
+                alert.showAndWait();
+                return;
+            }
+
+            User nextUser = library.userQueue.peek();
+            Book book = nextUser.getReservedBook();
+            if (book == null) return;
+
+            book.setDays(days);
+            library.issueReservation(nextUser);
+            daysField.clear();
+
+            alert.setTitle("Success");
+            alert.setContentText("Book \"" + book.getTitle() + "\" issued to " + nextUser.getName() + " for " + days + " days.");
+            alert.showAndWait();
+
+            content.getChildren().setAll(createReserved());
+        });
+
+        HBox controls = new HBox(12);
+        controls.setAlignment(Pos.CENTER_LEFT);
+        controls.getChildren().addAll(daysField, issueBtn);
+
+        page.getChildren().addAll(title, subtitle, queueTable, controls);
+        return page;
     }
 
     private Pane createBorrowed() {

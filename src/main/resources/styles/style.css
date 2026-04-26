@@ -44,6 +44,33 @@
     -fx-text-fill: #2C2420;
 }
 
+.border-pane > .vbox > .back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A09080;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-padding: 11 14 11 14;
+    -fx-alignment: CENTER-LEFT;
+    -fx-cursor: hand;
+    -fx-border-color: #3D3330;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-max-width: Infinity;
+}
+
+.border-pane > .vbox > .back-button:hover {
+    -fx-text-fill: #F5F0EB;
+    -fx-background-color: #3D3330;
+}
+
+.user-info-label {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: #7A6A58;
+    -fx-padding: 20 0 0 8;
+    -fx-wrap-text: true;
+}
+
 .stack-pane {
     -fx-background-color: #F5F0EB;
     -fx-padding: 0;
@@ -135,6 +162,27 @@
     -fx-background-color: #E5DDD5;
     -fx-text-fill: #B8A898;
     -fx-cursor: default;
+    -fx-effect: none;
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A09080;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16 8 16;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-border-color: #DDD5CC;
+    -fx-border-width: 1;
+    -fx-effect: none;
+    -fx-font-weight: normal;
+}
+
+.back-button:hover {
+    -fx-background-color: #F0E8E0;
+    -fx-text-fill: #2C2420;
     -fx-effect: none;
 }
 
@@ -373,4 +421,63 @@
 
 .icon-label {
     -fx-font-size: 20px;
+}
+
+.role-selection-root {
+    -fx-background-color: #F5F0EB;
+    -fx-padding: 60;
+    -fx-spacing: 24;
+    -fx-alignment: CENTER;
+}
+
+.role-logo {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C2420;
+    -fx-letter-spacing: 6px;
+}
+
+.role-subtitle {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #A09080;
+}
+
+.role-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 18;
+    -fx-border-color: #E5DDD5;
+    -fx-border-width: 1;
+    -fx-border-radius: 18;
+    -fx-padding: 40 48 40 48;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(44,36,32,0.07), 14, 0, 0, 3);
+    -fx-min-width: 220px;
+    -fx-spacing: 12;
+    -fx-alignment: CENTER;
+}
+
+.role-card:hover {
+    -fx-border-color: #C8A882;
+    -fx-effect: dropshadow(gaussian, rgba(200,168,130,0.30), 18, 0, 0, 4);
+}
+
+.role-icon {
+    -fx-font-size: 36px;
+}
+
+.role-card-title {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C2420;
+}
+
+.role-card-desc {
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #A09080;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }

@@ -1,9 +1,9 @@
-1, Don Quixote, Miguel de Cervantes, false, name, 0
-2, A Tale of Two Cities, Charles Dickens, false, name, 0
+1, Don Quixote, Miguel de Cervantes, true, Yevhenii, 10
+2, A Tale of Two Cities, Charles Dickens, true, Yevhenii, 10
 3, The Lord of the Rings, J.R.R. Tolkien, true, Ihor, 9
 4, The Little Prince, Antoine de Saint-Exupéry, true, Yevhenii, 12
 5, Harry Potter and the Sorcerer’s Stone, J.K. Rowling, true, John, 10
-6, And Then There Were None, Agatha Christie, false, name, 0
+6, And Then There Were None, Agatha Christie, true, Yevhenii, 4
 7, Dream of the Red Chamber, Cao Xueqin, false, name, 0
 8, The Hobbit, J.R.R. Tolkien, false, name, 0
 9, She: A History of Adventure, H. Rider Haggard, false, name, 0

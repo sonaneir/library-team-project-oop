@@ -11,6 +11,7 @@ public class Book {
     private IntegerProperty days = new SimpleIntegerProperty(0);
     private static int bookId = 1;
     private int id;
+    private String reservedBy = null;
 
     Book(String title, String author) {
         this.id = bookId++;
@@ -66,12 +67,24 @@ public class Book {
         return id;
     }
 
-    public void decreaseId(){
+    public void decreaseId() {
         this.id--;
     }
 
     public static void resetBookId(int id) {
         bookId = id;
+    }
+
+    public String getReservedBy() {
+        return reservedBy;
+    }
+
+    public void setReservedBy(String login) {
+        this.reservedBy = login;
+    }
+
+    public boolean isReserved() {
+        return reservedBy != null;
     }
 
     @Override
