@@ -18,11 +18,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// main JavaFX application class — extends Application to use the GUI framework
 public class LibraryApplication extends Application {
+    // central area where different pages are swapped in and out
     private StackPane content = new StackPane();
     private Library library = new Library();
+    // currently logged-in user (null when admin or no one is logged in)
     private User currentUser = null;
 
+    // entry point of the JavaFX app — first screen is role selection
     @Override
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(createRoleSelection(stage), 1100, 650);
@@ -32,6 +36,7 @@ public class LibraryApplication extends Application {
         stage.show();
     }
 
+    // first screen — choose between Admin and User
     private Pane createRoleSelection(Stage stage) {
         VBox root = new VBox(32);
         root.setAlignment(Pos.CENTER);
@@ -46,6 +51,7 @@ public class LibraryApplication extends Application {
         HBox cards = new HBox(28);
         cards.setAlignment(Pos.CENTER);
 
+        // admin card — clicking it opens the admin panel
         VBox adminCard = new VBox(16);
         adminCard.getStyleClass().add("role-card");
         adminCard.setAlignment(Pos.CENTER);
@@ -58,6 +64,7 @@ public class LibraryApplication extends Application {
         adminCard.getChildren().addAll(adminIcon, adminLabel, adminDesc);
         adminCard.setOnMouseClicked(e -> launchAdmin(stage));
 
+        // user card — clicking it opens the user login screen
         VBox userCard = new VBox(16);
         userCard.getStyleClass().add("role-card");
         userCard.setAlignment(Pos.CENTER);
@@ -75,6 +82,7 @@ public class LibraryApplication extends Application {
         return root;
     }
 
+    // builds the main admin layout: sidebar on the left, content in the center
     private void launchAdmin(Stage stage) {
         BorderPane root = new BorderPane();
         root.setCenter(content);
@@ -85,6 +93,7 @@ public class LibraryApplication extends Application {
         stage.setScene(scene);
     }
 
+    // simple form to enter user name and login before browsing books
     private void showUserLogin(Stage stage) {
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
@@ -107,6 +116,7 @@ public class LibraryApplication extends Application {
         Label errorLabel = new Label("");
         errorLabel.setStyle("-fx-text-fill: #D4846A;");
 
+        // back button — returns to the role selection screen
         Button backBtn = new Button("← Back");
         backBtn.getStyleClass().add("back-button");
         backBtn.setOnAction(e -> {
@@ -115,6 +125,7 @@ public class LibraryApplication extends Application {
             stage.setScene(scene);
         });
 
+        // validates fields, creates a User object and opens the user view
         continueBtn.setOnAction(e -> {
             if (nameField.getText().isEmpty() || loginField.getText().isEmpty()) {
                 errorLabel.setText("Please fill in both fields.");
@@ -130,6 +141,7 @@ public class LibraryApplication extends Application {
         stage.setScene(scene);
     }
 
+    // user view layout — sidebar + content area
     private void launchUser(Stage stage) {
         StackPane userContent = new StackPane();
         BorderPane root = new BorderPane();
@@ -141,6 +153,7 @@ public class LibraryApplication extends Application {
         stage.setScene(scene);
     }
 
+    // sidebar for the user view with navigation buttons
     private VBox createUserSideBar(Stage stage, StackPane userContent) {
         VBox side = new VBox(15);
         side.setPadding(new Insets(20));
@@ -155,6 +168,7 @@ public class LibraryApplication extends Application {
         myReservationBtn.setMaxWidth(Double.MAX_VALUE);
         myReservationBtn.setOnAction(e -> userContent.getChildren().setAll(createUserReservation()));
 
+        // exit button — clears current user and returns to role selection
         Button backBtn = new Button("← Exit");
         backBtn.setMaxWidth(Double.MAX_VALUE);
         backBtn.getStyleClass().add("back-button");
@@ -172,6 +186,7 @@ public class LibraryApplication extends Application {
         return side;
     }
 
+    // page where users browse and reserve available books
     private Pane createUserBrowse(StackPane userContent) {
         VBox page = new VBox(16);
         page.setPadding(new Insets(36, 40, 36, 40));
@@ -184,6 +199,7 @@ public class LibraryApplication extends Application {
 
         TableView<Book> table = new TableView<>();
 
+        // table columns — each gets its value from the Book object
         TableColumn<Book, String> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(d -> new SimpleStringProperty(String.valueOf(d.getValue().getId())));
 
@@ -203,6 +219,7 @@ public class LibraryApplication extends Application {
         table.getColumns().addAll(idCol, titleCol, authorCol, statusCol);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        // filtered list — updates automatically as the user types in the search field
         FilteredList<Book> filtered = new FilteredList<>(library.availableBooks, b -> true);
         searchField.textProperty().addListener((obs, ov, nv) -> {
             filtered.setPredicate(b -> {
@@ -216,6 +233,7 @@ public class LibraryApplication extends Application {
         Button reserveBtn = new Button("Reserve");
         reserveBtn.setDisable(true);
 
+        // enable reserve button only if a free book is selected and user has no reservation yet
         table.getSelectionModel().selectedItemProperty().addListener((obs, ov, nv) -> {
             reserveBtn.setDisable(nv == null || nv.isReserved() || currentUser.hasReservation());
         });
@@ -224,6 +242,7 @@ public class LibraryApplication extends Application {
         alert.setHeaderText(null);
         alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
 
+        // reserve action — checks for existing reservation, then reserves
         reserveBtn.setOnAction(e -> {
             Book selected = table.getSelectionModel().getSelectedItem();
             if (selected == null) return;
@@ -244,6 +263,7 @@ public class LibraryApplication extends Application {
         return page;
     }
 
+    // page that shows the user's currently reserved book (or "no reservation")
     private Pane createUserReservation() {
         VBox page = new VBox(16);
         page.setPadding(new Insets(36, 40, 36, 40));
@@ -279,6 +299,7 @@ public class LibraryApplication extends Application {
         return page;
     }
 
+    // sidebar for the admin panel with all admin functions
     private VBox createAdminSideBar(Stage stage) {
         VBox side = new VBox(15);
         side.setPadding(new Insets(20));
@@ -288,6 +309,7 @@ public class LibraryApplication extends Application {
         Button dash = menuBtn("Dashboard", createDashboard());
         Button check = new Button("Check Books");
         check.setMaxWidth(Double.MAX_VALUE);
+        // rebuild the page each time so the table refreshes with current data
         check.setOnAction(event -> content.getChildren().setAll(createCheck()));
         Button issue = menuBtn("Issue Book", createIssue());
         Button borrowed = menuBtn("Borrowed", createBorrowed());
@@ -308,6 +330,7 @@ public class LibraryApplication extends Application {
         return side;
     }
 
+    // helper to create a sidebar button that switches the central pane
     private Button menuBtn(String text, Pane pane) {
         Button b = new Button(text);
         b.setMaxWidth(Double.MAX_VALUE);
@@ -315,6 +338,7 @@ public class LibraryApplication extends Application {
         return b;
     }
 
+    // admin dashboard — stat cards, progress bars and info section
     private Pane createDashboard() {
         VBox page = new VBox(28);
         page.getStyleClass().add("dashboard-root");
@@ -331,6 +355,7 @@ public class LibraryApplication extends Application {
         divider.setMaxWidth(Double.MAX_VALUE);
         divider.getStyleClass().add("divider");
 
+        // three stat cards: total / borrowed / available
         HBox cardsRow = new HBox(20);
         cardsRow.setPadding(new Insets(4, 0, 4, 0));
         cardsRow.getChildren().addAll(
@@ -376,6 +401,7 @@ public class LibraryApplication extends Application {
         Label statusValue = new Label();
         statusValue.getStyleClass().add("status-value");
 
+        // recalculates the borrowed % whenever the totals change
         Runnable updateStatus = () -> {
             int total = library.amountOfBooks.get();
             int borrowed = library.amountOfBooksBorrowed.get();
@@ -397,6 +423,7 @@ public class LibraryApplication extends Application {
         return page;
     }
 
+    // builds a single stat card with icon, number bound to a property, and label
     private VBox buildStatCard(String label, IntegerProperty valueProp, String accent, String icon) {
         VBox card = new VBox(10);
         card.getStyleClass().add("stat-card");
@@ -411,6 +438,7 @@ public class LibraryApplication extends Application {
         );
 
         Label valueLabel = new Label();
+        // bind the label text to the property so it updates automatically
         valueLabel.textProperty().bind(valueProp.asString());
         valueLabel.getStyleClass().add("stat-card-value");
 
@@ -429,6 +457,7 @@ public class LibraryApplication extends Application {
         return card;
     }
 
+    // custom progress bar — fill width is a fraction of the track
     private VBox buildProgressBar(String label, IntegerProperty valueProp, IntegerProperty totalProp, String color) {
         VBox container = new VBox(6);
 
@@ -453,6 +482,7 @@ public class LibraryApplication extends Application {
 
         track.getChildren().add(fill);
 
+        // recalculates the fill width whenever the value or total changes
         Runnable update = () -> {
             int total = totalProp.get();
             int val = valueProp.get();
@@ -468,6 +498,7 @@ public class LibraryApplication extends Application {
         return container;
     }
 
+    // page to view all books (available + borrowed), search, sort and delete
     private Pane createCheck() {
         VBox searchBox = new VBox(12);
         searchBox.setPadding(new Insets(30));
@@ -507,10 +538,12 @@ public class LibraryApplication extends Application {
         booksTable.getColumns().addAll(idColumn, titleColumn, authorColumn, statusColumn);
         booksTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        // combine available + borrowed into one list to show all books at once
         ObservableList<Book> allBooks = FXCollections.observableArrayList();
         allBooks.addAll(library.availableBooks);
         allBooks.addAll(library.borrowedBooks);
 
+        // listeners — keep the combined list in sync with library changes
         library.availableBooks.addListener((javafx.collections.ListChangeListener<Book>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) allBooks.addAll(change.getAddedSubList());
@@ -527,6 +560,7 @@ public class LibraryApplication extends Application {
 
         FilteredList<Book> filteredBooks = new FilteredList<>(allBooks, book -> true);
 
+        // search — filters by title/author starting with the typed text
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredBooks.setPredicate(book -> {
                 if (newValue == null || newValue.isEmpty()) return true;
@@ -537,6 +571,7 @@ public class LibraryApplication extends Application {
 
         booksTable.setItems(filteredBooks);
 
+        // sort buttons — use custom quicksort from BookSorter
         sortTitle.setOnAction(e -> {
             List<Book> sorted = new ArrayList<>(allBooks);
             BookSorter.quickSortByTitle(sorted, 0, sorted.size() - 1);
@@ -558,10 +593,12 @@ public class LibraryApplication extends Application {
         Button deleteButton = new Button("Delete");
         deleteButton.setDisable(true);
 
+        // enable delete only when a row is selected
         booksTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             deleteButton.setDisable(newValue == null);
         });
 
+        // delete with a confirmation dialog
         deleteButton.setOnAction(event -> {
             Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
             if (selectedBook != null) {
@@ -584,6 +621,7 @@ public class LibraryApplication extends Application {
         return searchBox;
     }
 
+    // page where admin issues a book directly by entering name/person/days
     private Pane createIssue() {
         VBox issueBox = new VBox(12);
         issueBox.setPadding(new Insets(30));
@@ -604,6 +642,7 @@ public class LibraryApplication extends Application {
             IntegerProperty days = new SimpleIntegerProperty(0);
             boolean checkInt = false;
 
+            // try to parse days as a number; if not, show an error
             try {
                 days = new SimpleIntegerProperty(Integer.parseInt(daysField.getText()));
                 checkInt = true;
@@ -612,11 +651,13 @@ public class LibraryApplication extends Application {
                 issueAlert.setContentText("Days must be a number!");
             }
 
+            // main case — all fields are filled and days is valid
             if (checkInt && !bookField.getText().isEmpty() && !personField.getText().isEmpty() && !daysField.getText().isEmpty()) {
                 String bookName = bookField.getText();
                 String personName = personField.getText();
                 boolean checkBook = false;
 
+                // search the book among available ones
                 for (Book issueBook : library.availableBooks) {
                     if (issueBook.getTitle().equals(bookName)) {
                         issueAlert.setTitle("Success");
@@ -645,6 +686,7 @@ public class LibraryApplication extends Application {
                     bookField.clear();
                 }
 
+                // the rest are validation cases for different combinations of empty fields
             } else if (!bookField.getText().isEmpty() && personField.getText().isEmpty() && daysField.getText().isEmpty()) {
                 issueAlert.setTitle("Error");
                 issueAlert.setContentText("Please enter the customer's name and the days!");
@@ -675,6 +717,7 @@ public class LibraryApplication extends Application {
         return issueBox;
     }
 
+    // page that shows the reservation queue and lets admin issue to the first user
     private Pane createReserved() {
         VBox page = new VBox(20);
         page.setPadding(new Insets(36, 40, 36, 40));
@@ -687,6 +730,7 @@ public class LibraryApplication extends Application {
 
         TableView<User> queueTable = new TableView<>();
 
+        // # column — shows position in the queue (1-based)
         TableColumn<User, String> posCol = new TableColumn<>("#");
         posCol.setCellValueFactory(d -> {
             int idx = library.reservationQueue.indexOf(d.getValue()) + 1;
@@ -723,6 +767,7 @@ public class LibraryApplication extends Application {
         Button issueBtn = new Button("Issue to First in Queue");
         issueBtn.setDisable(library.reservationQueue.isEmpty());
 
+        // disable the issue button when the queue becomes empty
         library.reservationQueue.addListener((javafx.collections.ListChangeListener<User>) c -> {
             issueBtn.setDisable(library.reservationQueue.isEmpty());
         });
@@ -731,6 +776,7 @@ public class LibraryApplication extends Application {
         alert.setHeaderText(null);
         alert.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
 
+        // issue the reserved book to the first user in the queue
         issueBtn.setOnAction(e -> {
             if (library.userQueue.isEmpty()) return;
             int days;
@@ -743,6 +789,7 @@ public class LibraryApplication extends Application {
                 return;
             }
 
+            // peek — get the first user without removing them yet
             User nextUser = library.userQueue.peek();
             Book book = nextUser.getReservedBook();
             if (book == null) return;
@@ -755,6 +802,7 @@ public class LibraryApplication extends Application {
             alert.setContentText("Book \"" + book.getTitle() + "\" issued to " + nextUser.getName() + " for " + days + " days.");
             alert.showAndWait();
 
+            // refresh the page to show the updated queue
             content.getChildren().setAll(createReserved());
         });
 
@@ -766,6 +814,7 @@ public class LibraryApplication extends Application {
         return page;
     }
 
+    // simple page that lists all currently borrowed books
     private Pane createBorrowed() {
         VBox borrowedBox = new VBox(20);
         borrowedBox.setPadding(new Insets(30));
@@ -792,6 +841,7 @@ public class LibraryApplication extends Application {
         return borrowedBox;
     }
 
+    // simple page that lists all available books
     private Pane createAvailable() {
         VBox availableBox = new VBox(20);
         availableBox.setPadding(new Insets(30));
@@ -812,6 +862,7 @@ public class LibraryApplication extends Application {
         return availableBox;
     }
 
+    // page where admin can add a new book
     private Pane createAdd() {
         VBox addBox = new VBox(12);
         addBox.setPadding(new Insets(30));
@@ -827,6 +878,7 @@ public class LibraryApplication extends Application {
         addAlert.setHeaderText(null);
 
         addButton.setOnAction(event -> {
+            // validate input — both fields must be filled
             if (!titleField.getText().isEmpty() && !authorField.getText().isEmpty()) {
                 Book newBook = new Book(titleField.getText(), authorField.getText());
                 library.addBook(newBook);
